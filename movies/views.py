@@ -3,13 +3,13 @@ from django.shortcuts import render
 import redis
 
 # Create your views here.
-r = redis.Redis(host='localhost', port=6379, db=0)
+r = redis.Redis(host='localhost', port=6379, db=0, charset='utf-8', decode_responses=True)
 
 def index(request):
     movieKeys = r.keys("movie:*")
     movies = []
     for key in movieKeys:
-        movies.append(key.decode('utf-8')[6:] + ': ' + r.get(key).decode('utf-8'))
+        movies.append(key[6:] + ': ' + r.get(key))
     return render(request, 'movies/index.html', {'movies': movies})
 
 def loadmovies(request):
@@ -29,6 +29,6 @@ def search(request):
         redisKeys = r.keys('movie:' + request.POST['search'] + "*")
         movies = []
         for movie in redisKeys:
-            movies.append(r.get(movie).decode('utf-8'))
+            movies.append(r.get(movie))
         return render(request, 'movies/index.html', {'movies': movies})
     return render(request, 'movies/search.html')
