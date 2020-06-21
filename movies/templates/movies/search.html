@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search movie</title>
+</head>
+<body>
+<form action="{% url 'search' %}" method="post">
+    <input type="text" name="search">
+    <button type="submit">Search</button>
+    {% csrf_token %}
+</form>
+</body>
+</html>
